@@ -79,6 +79,7 @@ sptr<IDistributedDeviceProfile> DistributedDeviceProfileClient::LoadDeviceProfil
         std::unique_lock<std::mutex> lock(serviceLock_);
         proxyConVar_.wait_for(lock, std::chrono::milliseconds(LOAD_SA_TIMEOUT_MS),
             [this]() { return loadSystemAbilityFinish_; });
+        loadSystemAbilityFinish_ = false;
         if (dpProxy_ != nullptr) {
             HILOGI("Get profile Service success!");
             return dpProxy_;
