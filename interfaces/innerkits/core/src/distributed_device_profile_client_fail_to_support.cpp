@@ -412,6 +412,7 @@ void DistributedDeviceProfileClient::ReleaseResource()
     ReleaseDeathRecipient();
     ReleaseRegisterBusinessCallback();
     ReSubscribeAllServiceInfo();
+    (void)loadSystemAbilityFinish_;
     (void)retryErrCodes_.size();
     HILOGI("%{public}s no-build", __func__);
 }
