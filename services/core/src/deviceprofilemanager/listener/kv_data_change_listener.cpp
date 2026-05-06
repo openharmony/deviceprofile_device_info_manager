@@ -191,14 +191,15 @@ void KvDataChangeListener::ProcessInsertOrUpdate(const std::vector<std::string>&
     for (const auto& [dbKey, dbValue] : entries) {
         cJSON* jsonObj = cJSON_Parse(dbValue.c_str());
         if (jsonObj == nullptr) {
-            HILOGE("Parse JSON failed for key: %{public}s", dbKey.c_str());
+            HILOGE("Parse JSON failed for key: %{public}s", ProfileUtils::GetDbKeyAnonyString(dbKey).c_str());
             continue;
         }
 
         ParsedJSONFields fields;
         if (!ServiceInfoManager::GetInstance().ParseAndValidateJSON(jsonObj, fields)) {
             cJSON_Delete(jsonObj);
-            HILOGE("ParseAndValidateJSON failed for key: %{public}s", dbKey.c_str());
+            HILOGE("ParseAndValidateJSON failed for key: %{public}s",
+                ProfileUtils::GetDbKeyAnonyString(dbKey).c_str());
             continue;
         }
 
