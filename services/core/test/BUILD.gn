@@ -216,6 +216,16 @@ ohos_unittest("content_sensor_manager_test") {
   subsystem_name = "deviceprofile"
 }
 
+ohos_unittest("device_profile_manager_new_three_test") {
+  module_out_path = module_output_path
+  sources = [ "unittest/device_profile_manager_three_test.cpp" ]
+  configs = device_profile_configs
+  deps = device_profile_deps
+  external_deps = device_profile_external_deps
+  part_name = "device_info_manager"
+  subsystem_name = "deviceprofile"
+}
+
 ohos_unittest("content_sensor_pasteboard_info_test") {
   module_out_path = module_output_path
   sources = [ "unittest/content_sensor_pasteboard_info_test.cpp" ]
@@ -565,6 +575,7 @@ group("unittest") {
     ":device_profile_dao_test",
     ":device_profile_locd_callback_test",
     ":device_profile_manager_new_test",
+    ":device_profile_manager_new_three_test",
     ":device_profile_manager_new_two_test",
     ":distributed_device_profile_client_kv_new_test",
     ":distributed_device_profile_stub_new_test",
