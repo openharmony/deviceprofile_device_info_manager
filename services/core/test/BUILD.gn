@@ -560,6 +560,16 @@ ohos_unittest("device_profile_manager_new_two_test") {
   subsystem_name = "deviceprofile"
 }
 
+ohos_unittest("subscribe_profile_manager_new_test") {
+  module_out_path = module_output_path
+  sources = [ "unittest/subscribe_profile_manager_new_test.cpp" ]
+  configs = device_profile_configs
+  deps = device_profile_deps
+  external_deps = device_profile_external_deps
+  part_name = "device_info_manager"
+  subsystem_name = "deviceprofile"
+}
+
 group("unittest") {
   testonly = true
   deps = [
@@ -603,6 +613,7 @@ group("unittest") {
     ":static_capability_collector_test",
     ":static_capability_loader_test",
     ":static_profile_manager_test",
+    ":subscribe_profile_manager_new_test",
     ":subscribe_profile_manager_test",
     ":switch_adapter_test",
     ":sync_completed_callback_test",
