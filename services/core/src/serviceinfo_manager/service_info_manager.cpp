@@ -220,7 +220,7 @@ int32_t ServiceInfoManager::GetAllServiceInfoList(std::vector<ServiceInfo>& serv
 
         cJSON *jsonObj = cJSON_Parse(value.c_str());
         if (jsonObj == nullptr) {
-            HILOGE("Parse JSON failed for key: %{public}s", keyStr.c_str());
+            HILOGE("Parse JSON failed for key: %{public}s", ProfileUtils::GetDbKeyAnonyString(keyStr).c_str());
             continue;
         }
 
@@ -270,7 +270,7 @@ int32_t ServiceInfoManager::GetServiceInfosByUserInfo(const UserInfo& userInfo, 
 
     if (serviceInfos.empty()) {
         HILOGE("No match ServiceInfo for UserInfo: udid=%{public}s, userId=%{public}d, serviceId=%{public}" PRId64,
-            userInfo.udid.c_str(), userInfo.userId, userInfo.serviceId);
+            ProfileUtils::GetAnonyString(userInfo.udid).c_str(), userInfo.userId, userInfo.serviceId);
         return DP_NOT_FIND_DATA;
     }
 
@@ -460,7 +460,7 @@ int32_t ServiceInfoManager::ProcessServiceInfoEntry(const std::string& key, cons
 {
     cJSON *jsonObj = cJSON_Parse(value.c_str());
     if (jsonObj == nullptr) {
-        HILOGE("Parse JSON failed for key: %{public}s", key.c_str());
+        HILOGE("Parse JSON failed for key: %{public}s", ProfileUtils::GetDbKeyAnonyString(key).c_str());
         return DP_LOAD_JSON_FILE_FAIL;
     }
 
