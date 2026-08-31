@@ -14,6 +14,7 @@
  */
 
 #include "profile_utils.h"
+#include "parse_profile_int.h"
 
 #include <codecvt>
 #include <locale>
@@ -754,12 +755,21 @@ int32_t ProfileUtils::EntriesToDeviceProfile(std::map<std::string, std::string> 
         profile.SetOsVersion(propertiesMap[OS_VERSION + OH_PROFILE_SUFFIX]);
     }
     if (IsPropertyValid(propertiesMap, OS_TYPE, MIN_OS_TYPE, MAX_OS_TYPE)) {
-        int32_t osType = std::atoi(propertiesMap[OS_TYPE].c_str());
-        profile.SetOsType(osType);
+        int32_t osType = 0;
+        if (ParseProfileInt32(propertiesMap[OS_TYPE], osType)) {
+            profile.SetOsType(osType);
+        } else {
+            HILOGE("invalid osType %{public}s", GetAnonyString(propertiesMap[OS_TYPE]).c_str());
+        }
     }
     if (IsPropertyValid(propertiesMap, OS_TYPE + OH_PROFILE_SUFFIX, MIN_OS_TYPE, MAX_OS_TYPE)) {
-        int32_t osType = std::atoi(propertiesMap[OS_TYPE + OH_PROFILE_SUFFIX].c_str());
-        profile.SetOsType(osType);
+        int32_t osType = 0;
+        if (ParseProfileInt32(propertiesMap[OS_TYPE + OH_PROFILE_SUFFIX], osType)) {
+            profile.SetOsType(osType);
+        } else {
+            HILOGE("invalid osType %{public}s",
+                GetAnonyString(propertiesMap[OS_TYPE + OH_PROFILE_SUFFIX]).c_str());
+        }
     }
     return DP_SUCCESS;
 }
@@ -921,7 +931,12 @@ bool ProfileUtils::IsPropertyValid(const std::map<std::string, std::string>& pro
         HILOGE("%{public}s is not numeric string", GetAnonyString(propertyValue).c_str());
         return false;
     }
-    if (minValue < std::atoi(propertyValue.c_str()) && std::atoi(propertyValue.c_str()) < maxValue) {
+    int32_t parsed = 0;
+    if (!ParseProfileInt32(propertyValue, parsed)) {
+        HILOGE("overflowing numeric property %{public}s", GetAnonyString(propertyValue).c_str());
+        return false;
+    }
+    if (minValue < parsed && parsed < maxValue) {
         return true;
     }
     return false;
@@ -938,7 +953,12 @@ bool ProfileUtils::IsPropertyValidInt64(const std::map<std::string,
         HILOGE("%{public}s is not numeric string", GetAnonyString(propertyValue).c_str());
         return false;
     }
-    if (INT64_MIN < std::atoll(propertyValue.c_str()) && std::atoll(propertyValue.c_str()) < INT64_MAX) {
+    int64_t parsed = 0;
+    if (!ParseProfileInt64(propertyValue, parsed)) {
+        HILOGE("overflowing numeric property %{public}s", GetAnonyString(propertyValue).c_str());
+        return false;
+    }
+    if (INT64_MIN < parsed && parsed < INT64_MAX) {
         return true;
     }
     return false;
@@ -1004,13 +1024,22 @@ int32_t ProfileUtils::GetUserIdFromDbKey(const std::string& dbKey)
         return userId;
     }
     if (splitKeys[0] == DEV_PREFIX && splitKeys.size() > NUM_3 && IsNumStr(splitKeys[NUM_3])) {
-        userId = std::atoi(splitKeys[NUM_3].c_str());
+        if (!ParseProfileInt32(splitKeys[NUM_3], userId)) {
+            HILOGE("invalid userId in dbKey");
+            userId = DEFAULT_USER_ID;
+        }
     }
     if (splitKeys[0] == SVR_PREFIX && splitKeys.size() > NUM_4 && IsNumStr(splitKeys[NUM_4])) {
-        userId = std::atoi(splitKeys[NUM_4].c_str());
+        if (!ParseProfileInt32(splitKeys[NUM_4], userId)) {
+            HILOGE("invalid userId in dbKey");
+            userId = DEFAULT_USER_ID;
+        }
     }
     if (splitKeys[0] == CHAR_PREFIX && splitKeys.size() > NUM_5 && IsNumStr(splitKeys[NUM_5])) {
-        userId = std::atoi(splitKeys[NUM_5].c_str());
+        if (!ParseProfileInt32(splitKeys[NUM_5], userId)) {
+            HILOGE("invalid userId in dbKey");
+            userId = DEFAULT_USER_ID;
+        }
     }
     return userId;
 }
