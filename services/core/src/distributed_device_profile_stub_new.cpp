@@ -30,7 +30,7 @@
 namespace OHOS {
 namespace DistributedDeviceProfile {
 namespace {
-const std::string TAG = "StubNew";
+const std::string TAG = "Stub";
 }
 
 DistributedDeviceProfileStubNew::DistributedDeviceProfileStubNew()
@@ -242,7 +242,7 @@ int32_t DistributedDeviceProfileStubNew::NotifyLocalServiceEventInner(uint32_t c
 int32_t DistributedDeviceProfileStubNew::OnRemoteRequest(uint32_t code, MessageParcel& data,
     MessageParcel& reply, MessageOption& option)
 {
-    HILOGI("code = %{public}u, CallingPid = %{public}u", code, IPCSkeleton::GetCallingPid());
+    HILOGI("%{public}u,%{public}u", code, IPCSkeleton::GetCallingPid());
     if (DistributedDeviceProfileServiceNew::GetInstance().IsStopped()) {
         HILOGE("dp service has stopped");
         return DP_SERVICE_STOPPED;
