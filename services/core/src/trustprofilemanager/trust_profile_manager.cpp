@@ -1008,7 +1008,7 @@ int32_t TrustProfileManager::GetAllAccessControlProfiles(std::vector<AccessContr
     if (profiles.empty()) {
         return DP_NOT_FIND_DATA;
     }
-    HILOGI("end!");
+    HILOGD("end!");
     return DP_SUCCESS;
 }
 
